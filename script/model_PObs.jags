@@ -1,0 +1,66 @@
+
+    model {
+    
+    # ------------------------------
+    # Priors
+    # ------------------------------
+    
+    # Occupancy probability in first year
+    psi[1] ~ dunif(0,1)  
+    
+    # Random effect priors for annual 'persistence probability' of occupied sites
+    phi_mean ~ dunif(0,1)
+    logit_phi_mean <- logit(phi_mean)
+    logit_phi_sigma ~ dunif(0,5)
+    logit_phi_tau <- pow(logit_phi_sigma,-2)
+    
+    # Random effect priors for annual 'colonization probability' of unoccupied sites
+    gamma_mean ~ dunif(0,1)
+    logit_gamma_mean <- logit(gamma_mean)
+    logit_gamma_sigma ~ dunif(0,5)
+    logit_gamma_tau <- pow(logit_gamma_sigma,-2)
+    
+    # Draw year effects for phi and gamma
+    for (t in 1:n_year){
+    
+      # Logit scale
+      logit_phi[t]   ~ dnorm(logit_phi_mean,logit_phi_tau)       # Persistence probability at occupied sites
+      logit_gamma[t] ~ dnorm(logit_gamma_mean,logit_gamma_tau)   # Colonization probability at unoccupied sites
+    
+      # Probability scale
+      phi[t]   <- ilogit(logit_phi[t])
+      gamma[t] <- ilogit(logit_gamma[t])
+    }
+    
+    # ------------------------------
+    # Likelihood
+    # ------------------------------
+    
+    # Loop through routes
+    for (i in 1:n_route){
+    
+      # Occupancy state in first year
+      z[i,1] ~ dbern(psi[1])
+      
+      # Loop through years and describe occupancy state
+      for (t in 2:n_year){
+        z[i, t] ~ dbern(z[i, t-1]*phi[t] + (1 - z[i, t-1])*gamma[t])
+      
+      }
+      
+    }
+  
+    # Occupancy probability as a derived parameter
+    for(t in 2:n_year) {
+      psi[t] <- psi[t-1]*phi[t] + (1-psi[t-1])*gamma[t]
+      
+      # Annual growth rate defined as ratio of annual occupancy
+      lambda[t-1] <- psi[t]/psi[t-1]
+    }
+    
+    # Estimates of mean percent change per year based on annual psi
+    trend <- 100 * ( pow( psi[n_year]/psi[1], 1/(n_year-1) )-1)
+    
+
+}
+    

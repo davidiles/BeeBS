@@ -1,0 +1,6 @@
+*.png
+*.Rdata
+*.Rhistory
+relevant_pubs/
+output/
+data/
