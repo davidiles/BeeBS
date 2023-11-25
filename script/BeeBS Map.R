@@ -119,7 +119,7 @@ for (sp in species_list){
   
   mean_occ <- mean(stop_counts$count>0) %>% round(2)
   n_detections <- nrow(sp_dat)
-
+  
   # ----------------------------------------
   # Map
   # ----------------------------------------
@@ -154,16 +154,32 @@ for (sp in species_list){
           legend.box.margin=margin(5,10,5,-20),
           legend.title.align=0.5,
           legend.title = element_markdown(lineheight=.9,hjust = "left"))+
-    annotate(geom="text",x=40000,y=3400000, label= paste0("Bombus\n",sp),lineheight = .85,hjust = 0,vjust=1,size=6,fontface =2) +
-    
-    annotate(geom="text",x=80000,y=3100000, label= "--->  photo goes here   <---",lineheight = .85,hjust = 0,size=4,fontface =1) +
-    
+    annotate(geom="text",x=50000,y=3400000, label= paste0("Bombus\n",sp),lineheight = .85,hjust = 0,vjust=1,size=6,fontface =2) +
     
     annotate(geom="text",x=50000,y=2900000, label= paste0("Number of detections: ", n_detections),lineheight = .85,hjust = 0,size=4,fontface =1) +
     annotate(geom="text",x=50000,y=2850000, label= paste0("Mean PObs: ", mean_occ),lineheight = .85,hjust = 0,size=4,fontface =1) +
     annotate(geom="text",x=50000,y=2800000, label= paste0("Mean count per stop: ", mean_count),lineheight = .85,hjust = 0,size=4,fontface =1) +
     annotate(geom="text",x=50000,y=2750000, label= "Trend (occurrence):    ____",lineheight = .85,hjust = 0,size=4,fontface =1) +
     annotate(geom="text",x=50000,y=2220000, label= paste0("Prepared on ",Sys.Date()),size=3,lineheight = .75,hjust = 0,color="#3b3b3b")
+  
+  
+  # ----------------------------------------
+  # Add photo
+  # ----------------------------------------
+  photo_path <- paste0("../data/Photos/",sp,".png")
+  if (file.exists(photo_path)){
+    img <-  readPNG(photo_path)
+    img_dim <- dim(img)
+    img_left <- 50000
+    img_bottom <- 2950000
+    img_top <- 3270000
+    img_right <- (img_top-img_bottom)*(dim(img)[2]/dim(img)[1])+img_left
+    
+    sp_plot <- sp_plot + annotation_raster(img, 
+                                           ymin = img_bottom,ymax= img_top,
+                                           xmin = img_left,xmax = img_right)
+    }
+  sp_plot
   
   png(paste0("../output/Maps/",sp,".png"), width=12, height=8, units="in", res=300, type="cairo")
   print(sp_plot)
