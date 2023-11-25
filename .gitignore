@@ -1,5 +1,7 @@
 *.Rdata
 *.Rhistory
 relevant_pubs/
-output/
 data/
+species_photos/
+output/figures/
+*.csv
