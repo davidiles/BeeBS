@@ -166,7 +166,7 @@ for (sp in species_list){
   # ----------------------------------------
   # Add photo
   # ----------------------------------------
-  photo_path <- paste0("../data/Photos/",sp,".png")
+  photo_path <- paste0("../species_photos/",sp,".png")
   if (file.exists(photo_path)){
     img <-  readPNG(photo_path)
     img_dim <- dim(img)
