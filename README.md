@@ -1,7 +1,7 @@
 # BeeBS
  Analysis of bumble bee data for BeeBS.
  
-![Bombus vancouverensis](https://github.com/davidiles/BeeBS/blob/main/species_photos/vancouverensis.png)
+![Bombus mixtus](https://github.com/davidiles/BeeBS/blob/main/output/Maps/mixtus.png)
  
 ## Data 
 
