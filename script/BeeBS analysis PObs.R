@@ -13,7 +13,7 @@ my.packs = c('jagsUI',"ggplot2",'reshape2',
 if (any(!my.packs %in% installed.packages()[, 'Package']))install.packages(my.packs[which(!my.packs %in% installed.packages()[, 'Package'])],dependencies = TRUE)
 lapply(my.packs, require, character.only = TRUE)
 
-setwd("D:/Working_Files/1_Projects/Side_Projects/BeeBS/script")
+setwd("C:/Users/IlesD/OneDrive - EC-EC/Iles/Projects/X_other_projects/BeeBS/script")
 
 rm(list=ls())
 theme_set(theme_bw()+
@@ -117,7 +117,7 @@ plot_4 <- ggplot(data = subset(annual_summary, Species %in% Species_to_plot))+
   geom_line(aes(x = Year, y = prop_obs), col = "dodgerblue", linetype = 2, alpha = 0.5)+
   
   ggtitle("Occurrence probability")+
-  ylab("Occurence probability")+
+  ylab("occurrence probability")+
   xlab("Year")+
   facet_wrap(Species~.)+
   scale_size_continuous(name = "# routes\nsurveyed", 
@@ -144,7 +144,7 @@ cat("
     # Priors
     # ------------------------------
     
-    # Occupancy probability in first year
+    # occurrence probability in first year
     psi[1] ~ dunif(0,1)  
     
     # Random effect priors for annual 'persistence probability' of occupied sites
@@ -178,10 +178,10 @@ cat("
     # Loop through routes
     for (i in 1:n_route){
     
-      # Occupancy state in first year
+      # occurrence state in first year
       z[i,1] ~ dbern(psi[1])
       
-      # Loop through years and describe occupancy state
+      # Loop through years and describe occurrence state
       for (t in 2:n_year){
         z[i, t] ~ dbern(z[i, t-1]*phi[t] + (1 - z[i, t-1])*gamma[t])
       
@@ -189,11 +189,11 @@ cat("
       
     }
   
-    # Occupancy probability as a derived parameter
+    # occurrence probability as a derived parameter
     for(t in 2:n_year) {
       psi[t] <- psi[t-1]*phi[t] + (1-psi[t-1])*gamma[t]
       
-      # Annual growth rate defined as ratio of annual occupancy
+      # Annual growth rate defined as ratio of annual occurrence
       lambda[t-1] <- psi[t]/psi[t-1]
     }
     
@@ -223,7 +223,7 @@ for (sp in species_summary$Species){
   sp_dat$presence <- as.numeric(sp_dat$count > 0)
   
   # Convert to "wide" format.  Each row is a route, each column is a year
-  # Occupancy status each year
+  # occurrence status each year
   z = sp_dat[,c("Route","Year","presence")] %>% 
     spread(Year, presence)
   rownames(z) <- z$Route

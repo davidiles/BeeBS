@@ -5,7 +5,7 @@
     # Priors
     # ------------------------------
     
-    # Occupancy probability in first year
+    # occurrence probability in first year
     psi[1] ~ dunif(0,1)  
     
     # Random effect priors for annual 'persistence probability' of occupied sites
@@ -39,10 +39,10 @@
     # Loop through routes
     for (i in 1:n_route){
     
-      # Occupancy state in first year
+      # occurrence state in first year
       z[i,1] ~ dbern(psi[1])
       
-      # Loop through years and describe occupancy state
+      # Loop through years and describe occurrence state
       for (t in 2:n_year){
         z[i, t] ~ dbern(z[i, t-1]*phi[t] + (1 - z[i, t-1])*gamma[t])
       
@@ -50,11 +50,11 @@
       
     }
   
-    # Occupancy probability as a derived parameter
+    # occurrence probability as a derived parameter
     for(t in 2:n_year) {
       psi[t] <- psi[t-1]*phi[t] + (1-psi[t-1])*gamma[t]
       
-      # Annual growth rate defined as ratio of annual occupancy
+      # Annual growth rate defined as ratio of annual occurrence
       lambda[t-1] <- psi[t]/psi[t-1]
     }
     

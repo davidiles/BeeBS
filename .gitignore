@@ -5,3 +5,4 @@ data/
 species_photos/
 output/figures/
 *.csv
+script/archive/

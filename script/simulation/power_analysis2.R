@@ -1,8 +1,8 @@
 library(jagsUI)
 library(tidyverse)
+library(viridis)
 
-setwd("D:/Working_Files/1_Projects/Side_Projects/BeeBS/script/simulation")
-
+setwd("C:/Users/IlesD/OneDrive - EC-EC/Iles/Projects/X_other_projects/BeeBS/script/simulation")
 rm(list=ls())
 
 sink("model_PObs.jags")
@@ -174,7 +174,8 @@ ggplot()+
   xlab("Simulation number")+
   ylab("Trend")+
   ggtitle("Precision analysis (trend)")+
-  facet_grid(psi_label~route_label)
+  facet_grid(psi_label~route_label)+
+  theme_bw()
 
 mean(precision_results$cov)
 
@@ -205,7 +206,8 @@ ggplot()+
   xlab("Simulation number")+
   ylab("Trend")+
   ggtitle("Precision analysis (trend)")+
-  facet_grid(psi_label~route_label)
+  facet_grid(psi_label~route_label)+
+  theme_bw()
 
 # ----------------------------------------------------
 # Summarize mean precision (width of 95% credible interval) for each scenario
@@ -223,4 +225,5 @@ ggplot()+
   xlab("# routes surveyed per year")+
   ylab("Width of 95% credible interval\n(uncertainty of trend estimate)")+
   ggtitle("Uncertainty in trend estimate")+
-  facet_grid(psi_label~.)
+  facet_grid(psi_label~.)+
+  theme_bw()
